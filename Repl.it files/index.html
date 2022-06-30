@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />-->
+   <!-- bootstrap for styling , Pyscript can also be used for styling instead of bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <style>
+      body 
+      {
+        background-color: #fcfcfc;
+        padding-top: 55px;
+        min-height: 100vh;
+        margin:0;
+        display:flex;
+        flex-direction:column;
+      }
+    </style>   
+  
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+        <py-env>
+          
+        - numpy
+        - matplotlib
+        - pandas
+        - scikit-learn
+      
+        - paths:
+            - /house.csv
+            - /housetarget.csv
+      </py-env>
+</head>
+
+<body>
+  <center>
+    <h1>Price Prediction</h1>
+  </center>
+  
+  <div id="t_out"></div>
+    
+  <p>
+    <h3>Enter the Median Income in block group</h3>
+          <input id="arg" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="" />
+  </p>  
+    
+  <p>
+    <h3>Enter the Median House Age in block group</h3>
+          <input id="arg1" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="" />
+  </p>
+    
+  <p>
+    <h3>Enter the average no. of rooms per household</h3>
+          <input id="arg2" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="" />
+  </p> 
+    
+  <p>
+    <h3>Enter the average no. of bedrooms per household</h3>
+          <input id="arg3" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="" />
+  </p>
+    
+  <p>
+    <h3>Enter the block group population</h3>
+      <input id="arg4" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="" />
+  </p>
+    
+  <p>
+    <h3>Enter the average no. of household members</h3>
+          <input id="arg5" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="" />
+  </p>
+    
+  <p>
+    <h3>Enter the block group latitude</h3>
+          <input id="arg6" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="" />
+  </p>
+    
+  <p>
+    <h3>Enter the block group longitude</h3>
+        <input id="arg7" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="" />
+  </p>
+
+  <center>
+    <button id="convert" type="submit"  class="btn btn-info" pys-onClick="convert">Predict</button>
+  </center>
+  
+  <h4>
+   Result:
+  </h4>
+  
+  <textarea id="Res" class="form-control" rows="2" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Result">
+  </textarea>
+  
+  <py-script>
+from js import console
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.ensemble import RandomForestRegressor
+
+def func(X_pred):
+    dataset = pd.read_csv('house.csv')
+    tdataset = pd.read_csv('housetarget.csv')    
+    
+    X = dataset.iloc[:, :].values 
+    Y = tdataset.iloc[:, 0].values 
+    
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.3, random_state=5)     
+    
+    clf = RandomForestRegressor()
+    clf.fit(X_train, Y_train)
+    
+    Y_pred = clf.predict(X_pred)
+    
+    return Y_pred
+    
+def convert(*ags, **kws):
+    arg = document.getElementById('arg').value;
+    arg1 = document.getElementById('arg1').value;
+    arg2 = document.getElementById('arg2').value;
+    arg3 = document.getElementById('arg3').value;
+    arg4 = document.getElementById('arg4').value;
+    arg5 = document.getElementById('arg5').value;
+    arg6 = document.getElementById('arg6').value;
+    arg7 = document.getElementById('arg7').value;
+    
+    arr = np.array([])
+
+    arr = np.append(arr, float(arg))
+    arr = np.append(arr, float(arg1))
+    arr = np.append(arr, float(arg2))
+    arr = np.append(arr, float(arg3))
+    arr = np.append(arr, float(arg4))
+    arr = np.append(arr, float(arg5))
+    arr = np.append(arr, float(arg6))
+    arr = np.append(arr, float(arg7))
+    
+    X_pred = np.array([])
+    X_pred = np.reshape(arr,(1,8))
+    
+    result = func(X_pred)
+    
+    console.log(f'text: {result}')
+    pyscript.write("Res", result[0])   
+    
+  </py-script>
+  
+  <script src="script.js" src="./main.py"></script>
+  
+</body>
+
+</html>
