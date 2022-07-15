@@ -1,5 +1,5 @@
 # Price-Prediction-using-ML
-A Real Estate Price Prediction MAchine Learning project implemented in Python. The model is trained on the sklearn California-Housing dataset using the following algorithms: 
+A Real Estate Price Prediction Machine Learning project implemented in Python. The model is trained on the sklearn California-Housing dataset using the following algorithms: 
 1. Linear Regression
 2. Decision Tree
 3. XGB
@@ -15,4 +15,6 @@ The various accuracy metrics are shown in the following tabular format:
 | XGB Regressor           |   0.789729 |              0.367932 |             0.286633 |                  0.535381 |
 | Random Forest Regressor |   0.807883 |              0.335513 |             0.261885 |                  0.511747 |
 | LGBM Regressor          |   0.836001 |              0.316359 |             0.223556 |                  0.472817 |
+
+I have deployed the project using Repl.it at: https://replit.com/@AyanGupta7/Price-Prediction#index.html
 
